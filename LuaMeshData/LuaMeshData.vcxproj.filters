@@ -66,6 +66,9 @@
     <ClCompile Include="LuaMeshData.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="lib\MyTools\Cleaner.cpp">
+      <Filter>lib\MyTools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\DirectX12\FrameResource.h">
@@ -201,6 +204,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DLLTools.h">
+      <Filter>lib\MyTools</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\MyTools\Cleaner.h">
       <Filter>lib\MyTools</Filter>
     </ClInclude>
   </ItemGroup>

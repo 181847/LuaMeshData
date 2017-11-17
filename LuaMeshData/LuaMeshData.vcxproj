@@ -22,7 +22,7 @@
     <ProjectGuid>{938BA2B7-16D8-4F56-9C6C-05A04A544FAD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>LuaMeshData</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -171,6 +171,7 @@
     <ClCompile Include="lib\DirectX12\Common\GeometryGenerator.cpp" />
     <ClCompile Include="lib\DirectX12\Common\MathHelper.cpp" />
     <ClCompile Include="lib\DirectX12\FrameResource.cpp" />
+    <ClCompile Include="lib\MyTools\Cleaner.cpp" />
     <ClCompile Include="LuaMeshData.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
@@ -212,6 +213,7 @@
     <ClInclude Include="lib\lua\lundump.h" />
     <ClInclude Include="lib\lua\lvm.h" />
     <ClInclude Include="lib\lua\lzio.h" />
+    <ClInclude Include="lib\MyTools\Cleaner.h" />
     <ClInclude Include="lib\MyTools\DeLinkedList.h" />
     <ClInclude Include="lib\MyTools\LinkedAllocator.h" />
     <ClInclude Include="lib\MyTools\MyAssert.h" />
