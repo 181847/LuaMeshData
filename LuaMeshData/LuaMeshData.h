@@ -1,6 +1,8 @@
 #pragma once
 #include "DLLTools.h"
 
+#include "lib\MyTools\MyAssert.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -18,8 +20,8 @@ extern "C"
 #pragma comment(lib, "lua.lib")
 
 #define checkMeshData(L) \
-	reinterpret_cast<LuaPointerContainer<GeometryGenerator::MeshData>*>\
-	(luaL_checkudata(L, 1, "LoadAssets.MeshData"))
+	reinterpret_cast<LuaPointerContainer<Lua::MeshData>*>\
+	(luaL_checkudata(L, 1, "LoadAssets.MeshData"))->pointer
 
 template<typename T>
 struct LuaPointerContainer
@@ -29,7 +31,10 @@ struct LuaPointerContainer
 	std::function<void(void)> cleaner;
 	LuaPointerContainer()
 	{
-		cleaner = [&this]() {delete this->pointer; };
+		cleaner = [&this]() {
+			delete this->pointer; 
+			printf("Mesh Data has been cleaned."); 
+		};
 	}
 	~LuaPointerContainer()
 	{
@@ -37,7 +42,7 @@ struct LuaPointerContainer
 	}
 
 	// reload '->'
-	T * operator ->()
+	T* operator->() const
 	{
 		return pointer;
 	}
@@ -64,6 +69,25 @@ static int lua_newMeshData(lua_State * L);
 // just show the data for test
 static int lua_showMeshData(lua_State * L);
 
+// add positioni to the buffer 
+static int lua_addPosition(lua_State * L);
+
+// add normal to the buffer
+static int lua_addNormal(lua_State * L);
+
+// add tangentU to the buffer
+static int lua_addTangentU(lua_State * L);
+
+// add textureCoord to the buffer
+static int lua_addTexC(lua_State * L);
+
+// add a vertex using the index of the previous added positions/normals.....
+// here we can just pass 
+static int lua_addVertex(lua_State * L);
+
+// show some help message.
+static int lua_help(lua_State * L);
+
 static const struct luaL_Reg MeshDataLib[] =
 {
 	{"new", lua_newMeshData},
@@ -73,5 +97,12 @@ static const struct luaL_Reg MeshDataLib[] =
 static const struct luaL_Reg MeshDataLib_m[] =
 {
 	{"show", lua_showMeshData},
+	{ "addPosition", lua_addPosition },
+	{ "addNormal", lua_addNormal },
+	{ "addTangentU", lua_addTangentU },
+	{ "addTexC", lua_addTexC },
+	{ "addVertex", lua_addVertex},
+	{ "help", lua_help },
+	
 	{NULL, NULL}
 };
