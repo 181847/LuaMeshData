@@ -1,7 +1,11 @@
 #pragma once
 
 #include "lib\DirectX12\Common\d3dUtil.h"
+#ifdef CONVERTE_INDEX_BY_MINUS_ONE
 #define OBJ_INDEX_TO_C_INDEX(index) (index - 1)
+#else
+#define OBJ_INDEX_TO_C_INDEX(index) (index)
+#endif
 
 namespace Lua 
 {
@@ -13,6 +17,13 @@ namespace Lua
 		DirectX::XMFLOAT3 Normal;
 		DirectX::XMFLOAT3 TangentU;
 		DirectX::XMFLOAT2 TexC;
+
+		Vertex(
+			DirectX::XMFLOAT3 pos,
+			DirectX::XMFLOAT3 nml,
+			DirectX::XMFLOAT3 tgu,
+			DirectX::XMFLOAT2 tec) 
+			:Position(pos), Normal(nml), TangentU(tgu), TexC(tec){}
 	};
 
 	struct MeshData
