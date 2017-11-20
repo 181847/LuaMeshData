@@ -28,6 +28,20 @@ int lua_newMeshData(lua_State * L)
 	auto * pMeshData = new Lua::MeshData();
 	pContainer->setPointer(pMeshData);
 
+	// the next few lines add empty data to the vector,
+	// these data all have the index 0, 
+	// which stand for the illegal data.
+	pMeshData->Positions.push_back({ 0.0f, 0.0f, 0.0f });
+	pMeshData->Normals.push_back({ 0.0f, 0.0f, 0.0f });
+	pMeshData->TangentUs.push_back({ 0.0f, 0.0f, 0.0f });
+	pMeshData->Texcoords.push_back({ 0.0f, 0.0f });
+	pMeshData->Indices32.push_back(0);
+	pMeshData->Vertices.push_back(Lua::Vertex(
+		pMeshData->Positions[0],
+		pMeshData->Normals[0],
+		pMeshData->TangentUs[0],
+		pMeshData->Texcoords[0]));
+
 	luaL_getmetatable(L, "LoadAssets.MeshData");
 	lua_setmetatable(L, -2);
 	
@@ -38,12 +52,12 @@ int lua_showMeshData(lua_State * L)
 {
 	// check and get mesh data
 	auto *pMeshData = checkMeshData(L);
-	printf("Vertex count:\t\t%d\n", pMeshData->Vertices.size());
-	printf("Index count:\t\t%d\n", pMeshData->Indices32.size());
-	printf("Position count:\t\t%d\n", pMeshData->Positions.size());
-	printf("Normal count:\t\t%d\n", pMeshData->Normals.size());
-	printf("TangentU count:\t\t%d\n", pMeshData->TangentUs.size());
-	printf("TextureCoord count:\t\t%d\n", pMeshData->Texcoords.size());
+	printf("Vertex count:\t\t%d\n", pMeshData->Vertices.size() - 1);
+	printf("Index count:\t\t%d\n", pMeshData->Indices32.size() - 1);
+	printf("Position count:\t\t%d\n", pMeshData->Positions.size() - 1);
+	printf("Normal count:\t\t%d\n", pMeshData->Normals.size() - 1);
+	printf("TangentU count:\t\t%d\n", pMeshData->TangentUs.size() - 1);
+	printf("TextureCoord count:\t\t%d\n", pMeshData->Texcoords.size() - 1);
 	return 0;
 }
 
@@ -100,20 +114,70 @@ int lua_addTexC(lua_State * L)
 
 int lua_addVertex(lua_State * L)
 {
-	auto * pMeshData = checkMeshData(L);
-	auto positionIndex = OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 2));
-	auto normalIndex = OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 3));
-	auto tangentUIndex = OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 4));
-	auto texCIndex = OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 5));
+	auto * pMeshData	= checkMeshData(L);
+	auto positionIndex	= 
+		static_cast<unsigned int>(OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 2)));
+	auto texCIndex =
+		static_cast<unsigned int>(OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 3)));
+	auto normalIndex	= 
+		static_cast<unsigned int>(OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 4)));
+	auto tangentUIndex	= 
+		static_cast<unsigned int>(OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 5)));
 
 	auto posCount = pMeshData->Positions.size();
+	auto texCount = pMeshData->Texcoords.size();
 	auto nmlCount = pMeshData->Normals.size();
 	auto tguCount = pMeshData->TangentUs.size();
-	auto texCount = pMeshData->Texcoords.size();
 
-	if (positionIndex > )
+
+	DEBUG_MESSAGE("add vertex: %d\t%d\t%d\t%d\n",
+		positionIndex, normalIndex, tangentUIndex, texCIndex);
+	DEBUG_MESSAGE("size comp : %d\t%d\t%d\t%d\n",
+		posCount, nmlCount, tguCount, texCount);
+
+	// check index range
+	if (	positionIndex	>= posCount
+		||  texCIndex		>= texCount
+		||	normalIndex		>= nmlCount
+		||	tangentUIndex	>= tguCount)
+	{
+		lua_pushboolean(L, false);
+		lua_pushstring(L, "index out of range.");
+		return 2;
+	}
+
+	pMeshData->Vertices.push_back(
+		Lua::Vertex(
+			pMeshData->Positions[positionIndex],
+			pMeshData->Normals	[normalIndex],
+			pMeshData->TangentUs[tangentUIndex],
+			pMeshData->Texcoords[texCIndex]
+		));
+
+	// oppose to the index out of range,
+	// when there is no error,
+	// return true.
+	lua_pushboolean(L, true);
 	
-	return 0;
+	return 1;
+}
+
+int lua_addIndex(lua_State * L)
+{
+	auto * pMeshData = checkMeshData(L);
+	auto index = OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 2));
+
+	if (index >= pMeshData->Vertices.size())
+	{
+		lua_pushboolean(L, false);
+		lua_pushstring(L, "the vertex index out of range.");
+		return 2;
+	}
+	pMeshData->Indices32.push_back(static_cast<Lua::uint32>(index));
+	
+	// 
+	lua_pushboolean(L, true);
+	return 1;
 }
 
 int lua_help(lua_State * L)
@@ -124,9 +188,10 @@ int lua_help(lua_State * L)
 	fprintf(stderr, ":addPosition: add one position to the buffer, please pass 3 number.\n");
 	fprintf(stderr, ":addNormal: add one normal to the buffer, please pass 3 number.\n");
 	fprintf(stderr, ":addTangentU: add one tangentU to the buffer, please pass 3 number.\n");
-	fprintf(stderr, ":addTexC: add one textureCoord to the buffer, please pass 2 number.\n");
+	fprintf(stderr, ":addTextureCoord: add one textureCoord to the buffer, please pass 2 number.\n");
 	fprintf(stderr, ":addVertex: add one Vertex to the Vertices, must pass 4 integer, and the index just start from 1(same as in the .obj file).\n");
-	fprintf(stderr, "            the module will convert the index to the in the C.\n");
+	fprintf(stderr, "            the module will convert the index to the in the C. \n");
+	fprintf(stderr, "            index order: position normal textureCoord tangent");
 	fprintf(stderr, ":help: show this information.\n");
 	printf("\n****** HELP MESH DATA *****\n");
 
