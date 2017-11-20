@@ -82,8 +82,11 @@ static int lua_addTangentU(lua_State * L);
 static int lua_addTexC(lua_State * L);
 
 // add a vertex using the index of the previous added positions/normals.....
-// here we can just pass 
+// here we must pass 4 integer as the arguments
 static int lua_addVertex(lua_State * L);
+
+// add a index to the indices, a index must be the 'index' of the vertices,
+static int lua_addIndex(lua_State * L);
 
 // show some help message.
 static int lua_help(lua_State * L);
@@ -96,13 +99,14 @@ static const struct luaL_Reg MeshDataLib[] =
 
 static const struct luaL_Reg MeshDataLib_m[] =
 {
-	{"show", lua_showMeshData},
-	{ "addPosition", lua_addPosition },
-	{ "addNormal", lua_addNormal },
-	{ "addTangentU", lua_addTangentU },
-	{ "addTexC", lua_addTexC },
-	{ "addVertex", lua_addVertex},
-	{ "help", lua_help },
+	{"show",				lua_showMeshData},
+	{ "addPosition",		lua_addPosition },
+	{ "addNormal",			lua_addNormal },
+	{ "addTangentU",		lua_addTangentU },
+	{ "addTextureCoord",	lua_addTexC },
+	{ "addVertex",			lua_addVertex},
+	{ "addIndex",			lua_addIndex },
+	{ "help",				lua_help },
 	
 	{NULL, NULL}
 };
