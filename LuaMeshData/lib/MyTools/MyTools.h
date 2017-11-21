@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <memory>
 #include <fstream>
+#include <stdio.h>
+#include <functional>
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include "MyAssert.h"
