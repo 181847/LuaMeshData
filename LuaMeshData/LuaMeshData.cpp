@@ -24,8 +24,6 @@ int lua_newMeshData(lua_State * L)
 	auto *pContainer = reinterpret_cast<LuaPointerContainer<Lua::MeshData>*>
 		(lua_newuserdata(L, sizeof(LuaPointerContainer<Lua::MeshData>)));
 
-	DEBUG_MESSAGE("cleaner Size is: %d", sizeof(pContainer->cleaner));
-
 	auto * pMeshData = new Lua::MeshData();
 	pContainer->setPointer(pMeshData);
 
@@ -60,6 +58,18 @@ int lua_showMeshData(lua_State * L)
 	printf("TangentU count:\t\t%d\n", pMeshData->TangentUs.size() - 1);
 	printf("TextureCoord count:\t\t%d\n", pMeshData->Texcoords.size() - 1);
 	return 0;
+}
+
+int lua_getDetail(lua_State * L)
+{
+	auto *pMeshData = checkMeshData(L);
+	lua_pushinteger(L, pMeshData->Vertices.size() - 1);
+	lua_pushinteger(L, pMeshData->Indices32.size() - 1);
+	lua_pushinteger(L, pMeshData->Positions.size() - 1);
+	lua_pushinteger(L, pMeshData->Normals.size() - 1);
+	lua_pushinteger(L, pMeshData->TangentUs.size() - 1);
+	lua_pushinteger(L, pMeshData->Texcoords.size() - 1);
+	return 6;
 }
 
 int lua_addPosition(lua_State * L)
@@ -205,8 +215,7 @@ int lua_help(lua_State * L)
 
 int lua_gc(lua_State * L)
 {
-	auto * pContainer = checkConainer(L);
-	delete pContainer->pointer;
+	checkConainer(L)->freePointer();
 
 	DEBUG_MESSAGE("MeshData has been deleted.\n");
 

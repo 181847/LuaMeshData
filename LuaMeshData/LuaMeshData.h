@@ -101,6 +101,9 @@ static int lua_newMeshData(lua_State * L);
 // just show the data for test
 static int lua_showMeshData(lua_State * L);
 
+// just show the data for test
+static int lua_getDetail(lua_State * L);
+
 // add positioni to the buffer 
 static int lua_addPosition(lua_State * L);
 
@@ -138,6 +141,7 @@ static const struct luaL_Reg MeshDataLib[] =
 static const struct luaL_Reg MeshDataLib_m[] =
 {
 	{ "show",				lua_showMeshData},
+	{ "getDetail",			lua_getDetail },
 	{ "addPosition",		lua_addPosition },
 	{ "addNormal",			lua_addNormal },
 	{ "addTangentU",		lua_addTangentU },
