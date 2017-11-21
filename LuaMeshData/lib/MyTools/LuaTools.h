@@ -16,11 +16,18 @@ public:
 	void setPointer(T * p)
 	{
 		pointer = p;
-		cleaner = [p]() {if (p) delete p; };
 	}
 
 	T * operator -> () const
 	{
 		return pointer;
+	}
+
+	void freePointer()
+	{
+		if (pointer)
+		{
+			delete pointer;
+		}
 	}
 };
