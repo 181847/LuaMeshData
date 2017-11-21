@@ -217,11 +217,11 @@
     <ClInclude Include="lib\MyTools\Cleaner.h" />
     <ClInclude Include="lib\MyTools\DeLinkedList.h" />
     <ClInclude Include="lib\MyTools\LinkedAllocator.h" />
+    <ClInclude Include="lib\MyTools\LuaTools.h" />
     <ClInclude Include="lib\MyTools\MyAssert.h" />
     <ClInclude Include="lib\MyTools\MyStaticAllocator.h" />
     <ClInclude Include="lib\MyTools\MyTools.h" />
     <ClInclude Include="LuaMeshData.h" />
-    <ClInclude Include="MyMeshData.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
