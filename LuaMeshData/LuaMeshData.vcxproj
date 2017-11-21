@@ -177,7 +177,6 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DLLTools.h" />
     <ClInclude Include="lib\DirectX12\Common\Camera.h" />
     <ClInclude Include="lib\DirectX12\Common\d3dApp.h" />
     <ClInclude Include="lib\DirectX12\Common\d3dUtil.h" />
@@ -216,8 +215,8 @@
     <ClInclude Include="lib\lua\lzio.h" />
     <ClInclude Include="lib\MyTools\Cleaner.h" />
     <ClInclude Include="lib\MyTools\DeLinkedList.h" />
+    <ClInclude Include="lib\MyTools\DLLTools.h" />
     <ClInclude Include="lib\MyTools\LinkedAllocator.h" />
-    <ClInclude Include="lib\MyTools\LuaTools.h" />
     <ClInclude Include="lib\MyTools\MyAssert.h" />
     <ClInclude Include="lib\MyTools\MyStaticAllocator.h" />
     <ClInclude Include="lib\MyTools\MyTools.h" />
