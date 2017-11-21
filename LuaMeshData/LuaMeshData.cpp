@@ -1,5 +1,4 @@
 #include "LuaMeshData.h"
-#include "MyMeshData.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -24,6 +23,8 @@ int lua_newMeshData(lua_State * L)
 	// using a lambda of the struct to automatically free the object.
 	auto *pContainer = reinterpret_cast<LuaPointerContainer<Lua::MeshData>*>
 		(lua_newuserdata(L, sizeof(LuaPointerContainer<Lua::MeshData>)));
+
+	DEBUG_MESSAGE("cleaner Size is: %d", sizeof(pContainer->cleaner));
 
 	auto * pMeshData = new Lua::MeshData();
 	pContainer->setPointer(pMeshData);
@@ -116,13 +117,13 @@ int lua_addVertex(lua_State * L)
 {
 	auto * pMeshData	= checkMeshData(L);
 	auto positionIndex	= 
-		static_cast<unsigned int>(OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 2)));
+		static_cast<unsigned int>(luaL_checkinteger(L, 2));
 	auto texCIndex =
-		static_cast<unsigned int>(OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 3)));
+		static_cast<unsigned int>(luaL_checkinteger(L, 3));
 	auto normalIndex	= 
-		static_cast<unsigned int>(OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 4)));
+		static_cast<unsigned int>(luaL_checkinteger(L, 4));
 	auto tangentUIndex	= 
-		static_cast<unsigned int>(OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 5)));
+		static_cast<unsigned int>(luaL_checkinteger(L, 5));
 
 	auto posCount = pMeshData->Positions.size();
 	auto texCount = pMeshData->Texcoords.size();
@@ -142,7 +143,11 @@ int lua_addVertex(lua_State * L)
 		||	tangentUIndex	>= tguCount)
 	{
 		lua_pushboolean(L, false);
-		lua_pushstring(L, "index out of range.");
+		lua_pushstring(L, "some compent index out of range.");
+		lua_pushboolean(L, positionIndex >= posCount);
+		lua_pushboolean(L, texCIndex >= texCount);
+		lua_pushboolean(L, normalIndex >= nmlCount);
+		lua_pushboolean(L, tangentUIndex >= tguCount);
 		return 2;
 	}
 
@@ -165,7 +170,7 @@ int lua_addVertex(lua_State * L)
 int lua_addIndex(lua_State * L)
 {
 	auto * pMeshData = checkMeshData(L);
-	auto index = OBJ_INDEX_TO_C_INDEX(luaL_checkinteger(L, 2));
+	auto index = luaL_checkinteger(L, 2);
 
 	if (index >= pMeshData->Vertices.size())
 	{
@@ -175,7 +180,7 @@ int lua_addIndex(lua_State * L)
 	}
 	pMeshData->Indices32.push_back(static_cast<Lua::uint32>(index));
 	
-	// 
+	// operation success
 	lua_pushboolean(L, true);
 	return 1;
 }
@@ -194,6 +199,16 @@ int lua_help(lua_State * L)
 	fprintf(stderr, "            index order: position normal textureCoord tangent");
 	fprintf(stderr, ":help: show this information.\n");
 	printf("\n****** HELP MESH DATA *****\n");
+
+	return 0;
+}
+
+int lua_gc(lua_State * L)
+{
+	auto * pContainer = checkConainer(L);
+	delete pContainer->pointer;
+
+	DEBUG_MESSAGE("MeshData has been deleted.\n");
 
 	return 0;
 }
