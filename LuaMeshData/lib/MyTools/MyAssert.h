@@ -56,8 +56,15 @@ public:
 #define ThrowIfFalse(expr) expr
 #endif
 
-// print some message only in the debug mode.
 #ifdef _DEBUG
+#define SHOW_DEBUG_MESSAGE
+#endif
+
+
+#undef SHOW_DEBUG_MESSAGE
+
+// print some message only in the debug mode.
+#ifdef SHOW_DEBUG_MESSAGE
 #define DEBUG_MESSAGE(format, ...) fprintf(stderr, format, ##__VA_ARGS__)
 #else
 #define DEBUG_MESSAGE(...)
