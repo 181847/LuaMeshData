@@ -209,5 +209,8 @@
     <ClInclude Include="lib\MyTools\DLLTools.h">
       <Filter>lib\MyTools</Filter>
     </ClInclude>
+    <ClInclude Include="lib\MyTools\LuaTools.h">
+      <Filter>lib\MyTools</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

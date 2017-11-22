@@ -217,6 +217,7 @@
     <ClInclude Include="lib\MyTools\DeLinkedList.h" />
     <ClInclude Include="lib\MyTools\DLLTools.h" />
     <ClInclude Include="lib\MyTools\LinkedAllocator.h" />
+    <ClInclude Include="lib\MyTools\LuaTools.h" />
     <ClInclude Include="lib\MyTools\MyAssert.h" />
     <ClInclude Include="lib\MyTools\MyStaticAllocator.h" />
     <ClInclude Include="lib\MyTools\MyTools.h" />
