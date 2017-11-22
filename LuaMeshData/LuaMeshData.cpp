@@ -56,20 +56,29 @@ int lua_showMeshData(lua_State * L)
 	printf("Position count:\t\t%d\n", pMeshData->Positions.size() - 1);
 	printf("Normal count:\t\t%d\n", pMeshData->Normals.size() - 1);
 	printf("TangentU count:\t\t%d\n", pMeshData->TangentUs.size() - 1);
-	printf("TextureCoord count:\t\t%d\n", pMeshData->Texcoords.size() - 1);
+	printf("TextureCoord count:\t%d\n", pMeshData->Texcoords.size() - 1);
 	return 0;
 }
 
 int lua_getDetail(lua_State * L)
 {
 	auto *pMeshData = checkMeshData(L);
+
+	// create a new table
+	lua_newtable(L);
 	lua_pushinteger(L, pMeshData->Vertices.size() - 1);
+	lua_setfield(L, -2, "VertexCount");
 	lua_pushinteger(L, pMeshData->Indices32.size() - 1);
+	lua_setfield(L, -2, "IndexCount");
 	lua_pushinteger(L, pMeshData->Positions.size() - 1);
+	lua_setfield(L, -2, "PositionCount");
 	lua_pushinteger(L, pMeshData->Normals.size() - 1);
+	lua_setfield(L, -2, "NormalCount");
 	lua_pushinteger(L, pMeshData->TangentUs.size() - 1);
+	lua_setfield(L, -2, "TangentUCount");
 	lua_pushinteger(L, pMeshData->Texcoords.size() - 1);
-	return 6;
+	lua_setfield(L, -2, "TextureCoordCount");
+	return 1;
 }
 
 int lua_addPosition(lua_State * L)
@@ -199,15 +208,18 @@ int lua_help(lua_State * L)
 {
 
 	printf("\n****** HELP MESH DATA *****\n");
-	fprintf(stderr, ":show: show the statics of the mesh.\n");
-	fprintf(stderr, ":addPosition: add one position to the buffer, please pass 3 number.\n");
-	fprintf(stderr, ":addNormal: add one normal to the buffer, please pass 3 number.\n");
-	fprintf(stderr, ":addTangentU: add one tangentU to the buffer, please pass 3 number.\n");
-	fprintf(stderr, ":addTextureCoord: add one textureCoord to the buffer, please pass 2 number.\n");
-	fprintf(stderr, ":addVertex: add one Vertex to the Vertices, must pass 4 integer, and the index just start from 1(same as in the .obj file).\n");
-	fprintf(stderr, "            the module will convert the index to the in the C. \n");
-	fprintf(stderr, "            index order: position normal textureCoord tangent");
-	fprintf(stderr, ":help: show this information.\n");
+	fprintf(stderr, ":show:				show the statics of the mesh.\n");
+	fprintf(stderr, ":addPosition:		add one position to the buffer, please pass 3 number.\n");
+	fprintf(stderr, ":addNormal:		add one normal to the buffer, please pass 3 number.\n");
+	fprintf(stderr, ":addTangentU:		add one tangentU to the buffer, please pass 3 number.\n");
+	fprintf(stderr, ":addTextureCoord:	add one textureCoord to the buffer, please pass 2 number.\n");
+	fprintf(stderr, ":addVertex:		add one Vertex to the Vertices, must pass 4 integer, and the index just start from 1(same as in the .obj file).\n");
+	fprintf(stderr, "						index order: position normal textureCoord tangent");
+	fprintf(stderr, ":help:				show this information.\n");
+	fprintf(stderr, ":getDetail:		this is like the show method, but instead print the information, ");
+	fprintf(stderr, ":						this function return a table contain the information:");
+	fprintf(stderr, "		VertexCount/IndexCount/PositionCount/NormalCount/TangentUCount/TextureCoordCount");
+
 	printf("\n****** HELP MESH DATA *****\n");
 
 	return 0;
