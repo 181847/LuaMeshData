@@ -212,5 +212,8 @@
     <ClInclude Include="lib\MyTools\LuaTools.h">
       <Filter>lib\MyTools</Filter>
     </ClInclude>
+    <ClInclude Include="LuaMeshDataStruct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

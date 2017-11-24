@@ -222,6 +222,7 @@
     <ClInclude Include="lib\MyTools\MyStaticAllocator.h" />
     <ClInclude Include="lib\MyTools\MyTools.h" />
     <ClInclude Include="LuaMeshData.h" />
+    <ClInclude Include="LuaMeshDataStruct.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
